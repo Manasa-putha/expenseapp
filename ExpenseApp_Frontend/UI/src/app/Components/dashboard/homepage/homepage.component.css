@@ -1,0 +1,141 @@
+
+  .container {
+    margin: 20px;
+  }
+  
+  .group-card {
+    margin-bottom: 20px;
+  }
+  
+  .balance {
+    margin-left: auto;
+    color: green;
+  }
+  /* General Container */
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+/* Group Card Styling */
+.group-card {
+  margin-bottom: 20px;
+}
+
+mat-card {
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  transition: transform 0.2s ease;
+}
+
+mat-card:hover {
+  transform: scale(1.02);
+}
+
+mat-card-header {
+  background-color: #0dc95c;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px 8px 0 0;
+}
+
+mat-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+mat-card-subtitle {
+  font-size: 1rem;
+  color: #666;
+}
+
+mat-card-content {
+  margin-top: 15px;
+  font-size: 1rem;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+/* Button Styling */
+button {
+  font-size: 1rem;
+  margin: 5px;
+}
+
+button[color="primary"] {
+  background-color: #3f51b5;
+  color: white;
+}
+
+button[color="warn"] {
+  background-color: #f44336;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Member List */
+mat-list {
+  margin-top: 10px;
+}
+
+mat-list-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+mat-list-item:last-child {
+  border-bottom: none;
+}
+
+.balance {
+  color: green;
+  font-weight: bold;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  mat-card {
+    padding: 10px;
+  }
+
+  mat-card-title {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  mat-card-title {
+    font-size: 1.1rem;
+  }
+
+  mat-card-subtitle {
+    font-size: 0.9rem;
+  }
+
+  mat-card-content {
+    font-size: 0.9rem;
+  }
+
+  button {
+    font-size: 0.9rem;
+  }
+
+}
+h4{
+  color: yellowgreen;
+}

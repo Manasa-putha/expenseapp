@@ -1,0 +1,48 @@
+
+  <!-- </mat-accordion> -->
+  <h1>Expense Sharing Groups</h1>
+  <div *ngFor="let group of groups" class="group-card">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Group Name:  {{ group.name }}</mat-card-title>
+            <!-- <mat-card-subtitle>Group ID: {{ group.id }}</mat-card-subtitle> -->
+        </mat-card-header>
+        
+        <mat-card-content>
+            <p><strong>Description:</strong> {{ group.description }}</p>
+            <p><strong>Created Date:</strong> {{ group.createdDate | date:'mediumDate' }}</p>
+            <p><strong>Number of Members:</strong> {{ group.groupUsers.length }} / 10</p>
+            
+            <h4>Members:</h4>
+            <mat-list>
+                <mat-list-item *ngFor="let member of group.groupUsers">
+                    {{ member.name }} ({{ member.email }})
+                    <span class="balance">{{ member.balance | currency }}</span>
+                </mat-list-item>
+            </mat-list>
+    
+            <h4>Expenses:</h4>
+            <p>Total Expenses: {{ group.expenses?.length }}</p>
+            <mat-list *ngIf="group.expenses?.length">
+                <mat-list-item *ngFor="let expense of group.expenses">
+                    <strong>{{ expense.description }}</strong> - {{ expense.amount | currency }} (Paid by: {{ expense.paidByName || 'Unknown' }})
+                    <span *ngIf="!expense.isSettled"> - Not Settled</span>
+                    <span *ngIf="expense.isSettled"> - Settled</span>
+                    
+                    <!-- <h5>Split Amounts:</h5>
+                    <mat-list *ngIf="expense.splitAmong?.length">
+                        <mat-list-item *ngFor="let split of expense.splitAmong">
+                            Member ID {{ split.memberId }} owes: {{ split.amountOwed | currency }}
+                        </mat-list-item>
+                    </mat-list> -->
+                </mat-list-item>
+            </mat-list>
+        </mat-card-content>
+    
+        <mat-card-actions *ngIf="isAdmin">
+            <button mat-button color="primary" (click)="editGroup(group)">Edit</button>
+            <button mat-button color="warn" (click)="deleteGroup(group.id)">Delete</button>
+        </mat-card-actions>
+    </mat-card>
+ </div>
+ 

@@ -1,0 +1,56 @@
+   <div class="container">
+    <h2>Your Groups and Balances</h2>
+  
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let group of userGroups">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ group.name }} ({{ group.description }})
+          </mat-panel-title>
+          <mat-panel-description>
+            Total Expenses: {{ calculateTotalExpenses(group.expenses) | currency }}  
+            <!--|  You Owe: {{ calculateTotalOwed(group.expenses, group.groupUsers) | currency }} -->
+            <!-- Others Owe You: {{ calculateUserLent(group.expenses) | currency }} -->
+
+            <!-- Others Owe You: {{ calculateUserLent(group.expenses) | currency }} -->
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+  
+        <div class="expenses-section">
+          <h3>Expenses</h3>
+          <mat-list>
+            <mat-list *ngFor="let expense of group.expenses" class="expense-item">
+              <div class="expense-content">
+                <div>
+                <button *ngIf="!expense.isSettled" mat-button color="primary" (click)="settleExpense(group.id, expense.id)" class="settle-button">
+                  Settle Expense
+                </button>
+              </div>
+                <div class="expense-details">
+                  <div><strong>{{ expense.description }}</strong> 
+                  - {{ expense.amount | currency }} 
+                  (Paid by: {{ expense.paidByName || 'Unknown' }})
+                </div>
+                  <span *ngIf="!expense.isSettled" class="status-not-settled"> - Not Settled</span>
+                  <span *ngIf="expense.isSettled" class="status-settled"> - Settled</span>
+                </div>
+                <div class="expense-split-details">
+                  <ul>
+                    <li *ngFor="let split of expense.splitAmong">
+                      <span *ngIf="split.memberId !== expense.paidById">
+                        {{ getUserName(split.memberId) }} owes {{ split.amountOwed | currency }}
+                      </span>
+                      <span *ngIf="split.memberId === expense.paidById">
+                        {{ getUserName(split.memberId) }} paid {{ expense.amount | currency }} and will be reimbursed{{ totalAmountOwedToPayer(expense.splitAmong, expense.paidById) | currency }}
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </mat-list>
+          </mat-list>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  

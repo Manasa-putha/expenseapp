@@ -1,0 +1,123 @@
+<div class="container">
+  <h2>Add Expense to Group</h2>
+
+  <mat-form-field>
+    <mat-label>Select Group</mat-label>
+    <mat-select [(ngModel)]="selectedGroup">
+      <mat-option *ngFor="let group of groups" [value]="group">{{ group.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <form [formGroup]="expenseForm" (ngSubmit)="addExpense()">
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <input matInput formControlName="description" />
+      <mat-error *ngIf="expenseForm.get('description')?.invalid && expenseForm.get('description')?.touched">
+        Description is required.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Amount</mat-label>
+      <input matInput type="number" formControlName="amount" />
+      <mat-error *ngIf="expenseForm.get('amount')?.invalid && expenseForm.get('amount')?.touched">
+        Amount must be greater than 0.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- <mat-form-field>
+      <mat-label>Paid By</mat-label>
+      <mat-select formControlName="paidBy">
+        <mat-option *ngFor="let member of selectedGroup?.groupUsers || []" [value]="member.id">{{ member.name }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="expenseForm.get('paidBy')?.invalid && expenseForm.get('paidBy')?.touched">
+        Paid By is required.
+      </mat-error>
+    </mat-form-field> -->
+    <mat-form-field>
+      <mat-label>Paid By</mat-label>
+      <mat-select formControlName="paidBy">
+        <mat-option *ngIf="!selectedGroup?.groupUsers?.length" disabled>Members are not there</mat-option>
+        <mat-option *ngFor="let member of selectedGroup?.groupUsers || []" [value]="member.id">{{ member.name }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="expenseForm.get('paidBy')?.invalid && expenseForm.get('paidBy')?.touched">
+        Paid By is required.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date"[min]="minDate" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+<!-- 
+    <mat-form-field>
+      <mat-label>Split Among</mat-label>
+      <mat-select formControlName="splitAmong" multiple>
+        <mat-option *ngFor="let member of selectedGroup?.groupUsers || []" [value]="member.id">{{ member.name }}</mat-option>
+      </mat-select>
+    </mat-form-field> -->
+    <mat-form-field>
+      <mat-label>Split Among</mat-label>
+      <mat-select formControlName="splitAmong" multiple>
+        <mat-option *ngIf="!selectedGroup?.groupUsers?.length" disabled>Members are not there</mat-option>
+        <mat-option *ngFor="let member of selectedGroup?.groupUsers || []" [value]="member.id">{{ member.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button type="submit" [disabled]="expenseForm.invalid || !selectedGroup">Add Expense</button>
+  </form>
+</div>
+<!-- <h4>Expenses:</h4>
+<p>Total Expenses: {{ selectedGroup?.expenses?.length }}</p>
+<mat-list *ngIf="selectedGroup?.expenses?.length">
+  <mat-list-item *ngFor="let expense of selectedGroup.expenses">
+    <strong>{{ expense.description }}</strong> - {{ expense.amount | currency }} (Paid by: {{ expense.paidByName || 'Unknown' }})
+    <span *ngIf="!expense.isSettled"> - Not Settled</span>
+    <span *ngIf="expense.isSettled"> - Settled</span>
+
+    <h4 *ngIf="expense.splitAmong?.length">Split Amounts:</h4>
+    <mat-list *ngIf="expense.splitAmong?.length">
+      <mat-list-item *ngFor="let split of expense.splitAmong">
+        Member {{ getMemberNameById(split.memberId) }} owes: {{ split.amountOwed | currency }}
+      </mat-list-item>
+    </mat-list>
+  </mat-list-item>
+</mat-list> -->
+<h4>Expenses:</h4>
+<p>Total Expenses: {{ selectedGroup?.expenses?.length }}</p>
+
+<mat-list *ngIf="selectedGroup?.expenses?.length">
+  <mat-list-item *ngFor="let expense of selectedGroup.expenses">
+    <strong>{{ expense.description }}</strong> 
+    - {{ expense.amount | currency }} 
+    (Paid by: {{ expense.paidByName || 'Unknown' }})
+    
+    
+    <span *ngIf="!expense.isSettled" class="status-not-settled"> - Not Settled</span>
+    <span *ngIf="expense.isSettled" class="status-settled"> - Settled</span>
+
+   
+    <mat-card-actions *ngIf="!expense.isSettled && isAdmin">
+      <button mat-button color="primary" (click)="markAsSettled(expense.id)">Mark as Settled</button>
+    </mat-card-actions>
+
+   
+    <h4 *ngIf="expense.splitAmong?.length">Split Amounts:</h4>
+    <mat-list *ngIf="expense.splitAmong?.length">
+      <mat-list-item *ngFor="let split of expense.splitAmong">
+        Member {{ getMemberNameById(split.memberId) }} owes: {{ split.amountOwed | currency }}
+      </mat-list-item>
+    </mat-list>
+
+    <!-- <h4>User Balances:</h4>
+<mat-list *ngFor="let member of selectedGroup?.members">
+  <mat-list-item>
+    {{ member.name }}: {{ calculateGroupBalances()[member.id] | currency }}
+  </mat-list-item>
+</mat-list> -->
+
+  </mat-list-item>
+</mat-list>
+

@@ -1,0 +1,10 @@
+.status-not-settled {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .status-settled {
+    color: green;
+    font-weight: bold;
+  }
+  

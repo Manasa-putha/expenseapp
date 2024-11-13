@@ -1,0 +1,71 @@
+
+<div class="container">
+  <h2>Create a New Expense Group</h2>
+
+  <form [formGroup]="groupForm" (ngSubmit)="createGroup()">
+    <!-- Group Details Section -->
+    <div class="group-details">
+      <!-- <mat-form-field>
+        <mat-label>Group ID</mat-label>
+        <input matInput formControlName="groupId" />
+        <mat-error *ngIf="groupForm.get('groupId')?.invalid && groupForm.get('groupId')?.touched">Group ID is required.</mat-error>
+      </mat-form-field> -->
+
+      <mat-form-field>
+        <mat-label>Group Name</mat-label>
+        <input matInput formControlName="name" />
+        <mat-error *ngIf="groupForm.get('name')?.invalid && groupForm.get('name')?.touched">Group Name is required.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Created Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="createdDate"[min]="minDate" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <!-- Member Addition Section -->
+    <div class="member-section">
+      <h3>Add Members (Max 10)</h3>
+      <div class="member-add-container">
+        <mat-form-field class="member-input">
+          <mat-label>Member Email</mat-label>
+          <input matInput #memberEmail placeholder="Enter email" (keyup.enter)="addMember(memberEmail.value); memberEmail.value='';" />
+          <mat-error *ngIf="isEmailInvalid">Please enter a valid email address.</mat-error>
+        </mat-form-field>
+        <mat-hint *ngIf="members.length >= 10" color="warn">Maximum 10 members can be added.</mat-hint>
+        <button type="button" mat-raised-button color="primary"  (click)="addMember(memberEmail.value); memberEmail.value='';">Add Member</button>
+      </div>
+
+      <!-- List of added members -->
+      <div *ngIf="members.length > 0">
+        <h4>Members Added</h4>
+        <ul class="member-list">
+          <li *ngFor="let member of members">
+            {{ member.email }} <button mat-icon-button color="warn" (click)="removeMember(member.email)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <mat-hint *ngIf="members.length >= 10" color="warn">Maximum 10 members can be added.</mat-hint>
+    </div>
+    
+     <!-- Expenses Input Section
+     <div>
+      <mat-form-field>
+        <mat-label>Expenses</mat-label>
+        <input matInput formControlName="expenses" type="number" placeholder="Enter total expenses" />
+        <mat-error *ngIf="groupForm.get('expenses')?.invalid && groupForm.get('expenses')?.touched">Expenses are required and must be a valid number.</mat-error>
+      </mat-form-field>
+    </div> -->
+    <button mat-raised-button color="primary" type="submit" [disabled]="groupForm.invalid || members.length === 0">Create Group</button>
+  </form>
+  </div>
